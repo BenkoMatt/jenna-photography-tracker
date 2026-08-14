@@ -1,0 +1,21 @@
+# Environment files
+.env
+.env.*
+
+# SSH/GPG keys
+*.pem
+*.key
+id_*
+authorized_keys
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Test screenshots (not needed in repo)
+*.png
