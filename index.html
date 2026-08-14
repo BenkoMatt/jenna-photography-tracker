@@ -558,6 +558,34 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 .confirm-actions{display:flex;gap:12px}
 .confirm-actions .btn{flex:1}
 
+/* ── Secret Note Card ──────────────────────── */
+.note-card{
+  background:linear-gradient(135deg,var(--bg-card),var(--bg-elev));
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-md);
+  padding:clamp(32px,8vw,56px) clamp(24px,6vw,44px);
+  text-align:center;
+  max-width:560px;margin:clamp(40px,10vw,80px) auto;
+  position:relative;
+}
+.note-aperture{
+  width:clamp(48px,10vw,64px);height:clamp(48px,10vw,64px);
+  margin:0 auto clamp(20px,4vw,28px);color:var(--gold);
+}
+.note-aperture svg{display:block;width:100%;height:100%}
+.note-text{
+  font-family:var(--serif);font-size:clamp(18px,4vw,24px);
+  line-height:1.5;color:var(--ink);font-weight:500;
+}
+.note-text p{margin-bottom:14px}
+.note-sign{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(15px,3vw,18px);color:var(--ink-soft);
+  margin-top:clamp(20px,4vw,28px);letter-spacing:.02em;
+}
+.tab-secret{display:none !important}
+
 /* ═══ DESKTOP ENHANCEMENTS ════════════════════ */
 @media (min-width:680px){
   .wrap{max-width:1100px;padding:0 40px 80px}
@@ -666,6 +694,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{
   <nav class="tabs" role="tablist">
     <button class="tab" role="tab" aria-selected="true" aria-controls="panel-log" id="tab-log">Shoot Log</button>
     <button class="tab" role="tab" aria-selected="false" aria-controls="panel-cal" id="tab-cal" tabindex="-1">Calendar</button>
+    <button class="tab tab-secret" role="tab" aria-selected="false" aria-controls="panel-note" id="tab-note" tabindex="-1" hidden>A Note from Matt</button>
   </nav>
 
   <!-- ═══════ SHOOT LOG PANEL ═══════ -->
@@ -785,6 +814,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{
     <div class="upcoming-section" id="upcomingSection" style="display:none">
       <div class="section-label" style="margin-top:24px">All Scheduled Shoots</div>
       <div class="upcoming-list" id="upcomingList"></div>
+    </div>
+  </section>
+
+  <!-- ═══════ SECRET NOTE PANEL ═══════ -->
+  <section class="panel" id="panel-note" role="tabpanel" aria-labelledby="tab-note" hidden>
+    <div class="note-card">
+      <div class="note-aperture"><svg><use href="#ap"/></svg></div>
+      <div class="note-text">
+        <p>I love you so much &amp; I am so proud of where you are taking your photography.</p>
+        <p>At this rate we'll get that lakehouse in no time!!</p>
+      </div>
+      <div class="note-sign">— CEO &amp; Founder</div>
     </div>
   </section>
 </div>
@@ -913,6 +954,23 @@ tabs.forEach(function(tab){
 tabs.forEach(function(tab,i){tab.addEventListener('keydown',function(e){
   if(e.key==='ArrowRight'){e.preventDefault();tabs[(i+1)%tabs.length].focus();}
   if(e.key==='ArrowLeft'){e.preventDefault();tabs[(i-1+tabs.length+tabs.length)%tabs.length].focus();}});});
+
+/* ── Secret Note: tap aperture logo 3x to reveal ── */
+var tapCount=0;var tapTimer=null;
+document.querySelector('.aperture').addEventListener('click',function(){
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer=setTimeout(function(){tapCount=0;},600);
+  if(tapCount>=3){
+    tapCount=0;
+    var secretTab=document.getElementById('tab-note');
+    secretTab.hidden=false;
+    secretTab.classList.remove('tab-secret');
+    secretTab.style.display='flex';
+    secretTab.click();
+    toast('A note from Matt ♥');
+  }
+});
 
 /* ── Dashboard / Header stats ───────────────── */
 function updateStats(){
